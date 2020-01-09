@@ -21,7 +21,7 @@
         <el-card :body-style="{ padding: '0px' }"  class="dataList">
           <el-table
             :data="goodsList"
-            height="835"
+            height="810"
             border
             style="width: 100%;">
             <el-table-column
@@ -251,7 +251,7 @@ import { getGoodsList } from '../../api/dataQueryApi';
     display: block;
   }
   .goodsForm{
-    max-height: 835px;
+    max-height: 810px;
     overflow-x: hidden;
   }
   .goodsFormInput{

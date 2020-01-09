@@ -24,14 +24,19 @@
             :value="item.userId">
           </el-option> 
         </el-select>
-        <el-button class="queryButton" type="primary" icon="el-icon-search" ></el-button>
+        <el-button
+        class="queryButton"
+        :type="openQuery?'primary':'success'"
+        :icon="openQuery?'el-icon-search':'el-icon-refresh'"
+        @click="QueryRegisterList"
+        ></el-button>
         <div class="rightButton" >
         </div>
       </el-card>
       <el-card :body-style="{ padding: '0px' }"  class="dataList">
         <el-table
           :data="this.$store.state.registerData.checkRegisterList"
-          height="835"
+          height="810"
           border
           style="width: 100%;">
           <el-table-column
@@ -77,7 +82,9 @@
             label="状态"
             width="150">
             <template slot-scope="scope">
-              <el-tag type="success">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
+              <el-tag v-if="scope.row.type==0" type="success">{{$store.state.dictionaryData.registerType[scope.row.type].value}}</el-tag>
+              <el-tag v-if="scope.row.type==1" type="info">{{$store.state.dictionaryData.registerType[scope.row.type].value}}</el-tag>
+              <el-tag v-if="scope.row.type==2" type="warning">{{$store.state.dictionaryData.registerType[scope.row.type].value}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -186,9 +193,9 @@ export default {
     data() {
       return {
         registerType: 1,
-        category:'',
         goodsCode:'',
         userId:'',
+        openQuery:true,
         goodsobj:{price_In:0},
         thisRegisterInfo:{
           id: 2,
@@ -207,41 +214,9 @@ export default {
       }
     },
     methods:{
-      // gotoAddRegister:function() {
-      //   this.goodsobj={price_In:0};
-      //   let thisUserID = this.$store.state.dictionaryData.thisUser.userId;
-      //   this.thisRegisterInfo = {
-      //     id: 0,
-      //     formCode: "",
-      //     goodsCode: "",
-      //     goodsName: "",
-      //     count: 1,
-      //     stamp: "",
-      //     userId: thisUserID,
-      //     realName: "",
-      //     status: 0,
-      //     type: 0,
-      //     total: 0,
-      //     other: "",
-      //   }
-      //   this.registerType = 2;
-      // },
       gobackRegisterList:function() {
         this.registerType = 1;
       },
-      // gotoChangeRegister:function(registerrow) {
-      //   getGoogs(registerrow.goodsCode)
-      //   .then((response)=>{
-      //     this.goodsobj=response.data.data;
-      //   })
-      //   .catch((err)=>{
-      //     this.$message.error({
-      //       message:'错误'+err,
-      //     })
-      //   })
-      //   this.thisRegisterInfo =  registerrow;
-      //   this.registerType = 3;
-      // },
       gotoWatchRegister:function(registerrow) {
         getGoogs(registerrow.goodsCode)
         .then((response)=>{
@@ -256,33 +231,6 @@ export default {
         this.thisRegisterInfo.userId= this.$store.state.dictionaryData.thisUser.userId;
         this.registerType = 4;
       },
-      // addRegisterMet:function() {
-      //   if (this.goodsobj.goodsCode==undefined) {
-      //     //产品类型不能为空
-      //     this.$message.error({
-      //       message:'请选择产品类型',
-      //     })
-      //     return
-      //   }
-      //   this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
-      //   this.thisRegisterInfo.status = 0;
-      //   this.thisRegisterInfo.type = 0;
-      //   this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
-      //   addRegister( this.thisRegisterInfo)
-      //   .then((response)=>{
-      //     if ( response.data.data==true ) {
-      //       this.$message.success({
-      //         message:'添加成功',
-      //       })
-      //       this.$store.dispatch("ActRL");
-      //       this.gobackRegisterList();
-      //     } else {
-      //       this.$message.error({
-      //         message:'添加失败：'+response.data.message,
-      //       })
-      //     }
-      //   })
-      // },
       deleteRegisterMet:function(registerrow) {
         deleteRegister(registerrow.formCode)
         .then((response)=>{
@@ -327,8 +275,18 @@ export default {
             message:'错误'+err,
           })
         })
+      },
+      QueryRegisterList:function() {
+        if (this.openQuery) {
+          let Queryinfo ={};
+          Queryinfo.goodsCode = this.goodsCode;
+          Queryinfo.userId = this.userId;
+          this.$store.dispatch("ActQueryCRL",Queryinfo);
+        } else {
+          this.$store.dispatch("ActRL");
+        }
+        this.openQuery=!this.openQuery
       }
-
     }
 }
 </script>
@@ -351,7 +309,7 @@ export default {
     margin-left: 40px;
   }
   .registerForm{
-    max-height: 835px;
+    max-height: 810;
     overflow-x: hidden;
   }
   .registerFormInput{

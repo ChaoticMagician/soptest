@@ -21,7 +21,7 @@
       <el-card :body-style="{ padding: '0px' }"  class="dataList">
         <el-table
           :data="this.$store.state.ruleData.ruleList"
-          height="835"
+          height="810"
           border
           style="width: 100%;">
           <el-table-column
@@ -290,7 +290,7 @@ export default {
     margin-left: 10px;
   }
   .registerForm{
-    max-height: 835px;
+    max-height: 810px;
     overflow-x: hidden;
   }
   .registerFormInput{

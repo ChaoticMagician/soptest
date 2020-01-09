@@ -35,15 +35,20 @@
             :value="item.userId">
           </el-option> 
         </el-select>
-        <el-button class="queryButton" type="primary" icon="el-icon-search" ></el-button>
+        <el-button
+        class="queryButton"
+        :type="openQuery?'primary':'success'"
+        :icon="openQuery?'el-icon-search':'el-icon-refresh'"
+        @click="QueryRegisterList"
+        ></el-button>
         <div class="rightButton" >
           <el-button type="primary" @click="gotoAddRegister" icon="el-icon-plus" >添加</el-button>
         </div>
       </el-card>
       <el-card :body-style="{ padding: '0px' }"  class="dataList">
         <el-table
-          :data="this.$store.state.registerData.registerList"
-          height="835"
+          :data="this.$store.state.registerData.inputRegisterList"
+          height="810"
           border
           style="width: 100%;">
           <el-table-column
@@ -160,7 +165,6 @@
         <form class="registerForm" >
           <h3>入库登记单</h3>
           种类：{{goodsobj.name}}
-            <!-- @click="changeGoodsInfo(item)" -->
           <el-select
             class="goodsSelect"
             v-model="goodsobj"
@@ -218,6 +222,7 @@ export default {
         goodsCode:'',
         userId:'',
         goodsobj:{price_In:0},
+        openQuery:true,
         thisRegisterInfo:{
           id: 2,
           formCode: "9f963ddb954747dc9776b4873bdb08f0",
@@ -286,9 +291,6 @@ export default {
         this.thisRegisterInfo =  registerrow;
         this.thisRegisterInfo.userId= this.$store.state.dictionaryData.thisUser.userId;
         this.registerType = 4;
-      },
-      changeGoodsInfo:function(params,params12) {
-        console.log(params,params12);
       },
       addRegisterMet:function() {
         if (this.goodsobj.goodsCode==undefined) {
@@ -361,6 +363,18 @@ export default {
             message:'错误'+err,
           })
         })
+      },
+      QueryRegisterList:function() {
+        if (this.openQuery) {
+          let Queryinfo ={};
+          Queryinfo.goodsCode = this.goodsCode;
+          Queryinfo.category = this.category;
+          Queryinfo.userId = this.userId;
+          this.$store.dispatch("ActQueryIRL",Queryinfo);
+        } else {
+          this.$store.dispatch("ActRL");
+        }
+        this.openQuery=!this.openQuery
       }
 
     }
@@ -385,7 +399,7 @@ export default {
     margin-left: 40px;
   }
   .registerForm{
-    max-height: 835px;
+    max-height: 810px;
     overflow-x: hidden;
   }
   .registerFormInput{
@@ -395,6 +409,9 @@ export default {
   .priceSpen{
     display: inline-block;
     margin: 5px 10px 5px 55px;
+  }
+  .dataList{
+    height: 92%;
   }
   .registerForm::-webkit-scrollbar {
     /*滚动条整体样式*/

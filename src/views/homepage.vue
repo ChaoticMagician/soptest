@@ -8,7 +8,7 @@
       </div>
       <div class="sys-center" >
         <span>个人信息</span>
-        <span class="sys-goout iconfont LPiconkaiguan"></span>
+        <span @click="goBackFirst" class="sys-goout iconfont LPiconkaiguan"></span>
       </div>
     </el-header>
     <el-main>
@@ -78,8 +78,8 @@ export default {
           name:'货品登记',
           children:[
             {num:101,name:'入库登记',url:'/register/input'},
-            {num:102,name:'出库登记',url:'/register/input'},
-            {num:103,name:'货损登记',url:'/register/input'},
+            {num:102,name:'出库登记',url:'/register/out'},
+            {num:103,name:'货损登记',url:'/register/damage'},
             {num:104,name:'登记状态',url:'/register/check'},
           ]
         },
@@ -119,7 +119,7 @@ export default {
   },
   methods:{
     goBackFirst () {
-        this.$router.replace({path:'/homepage'});
+      this.$router.replace({path:'/'});
     }
   }
 };
@@ -130,6 +130,9 @@ export default {
   height: 50px;
   widows: 50px;
   background: #c20e0e;
+}
+#mainwin{
+  height: 99.5%;
 }
 .el-header{
   height: 50px;

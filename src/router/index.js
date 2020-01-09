@@ -30,6 +30,20 @@ const routes = [
         },
       },
       {
+        path: "/register/out",
+        name: "registerout",
+        components:{
+          default: () => import("../components/registerComp/registerOut.vue"),
+        },
+      },
+      {
+        path: "/register/damage",
+        name: "registerDamage",
+        components:{
+          default: () => import("../components/registerComp/registerDamage.vue"),
+        },
+      },
+      {
         path: "/register/check",
         name: "registerCheck",
         components:{

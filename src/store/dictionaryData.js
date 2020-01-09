@@ -8,9 +8,14 @@ const state = {
     {value: 5,label: '家具摆设'}
   ],
   registerStatus:[
-    {value:'待审核',keyid:1},
-    {value:'已确认',keyid:2},
-    {value:'已驳回',keyid:3},
+    {value:'待审核',keyid:0},
+    {value:'已确认',keyid:1},
+    {value:'已驳回',keyid:2},
+  ],
+  registerType:[
+    {value:'入库',keyid:0},
+    {value:'出库',keyid:1},
+    {value:'货损',keyid:2},
   ],
   userList:[
 
