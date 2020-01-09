@@ -176,7 +176,7 @@
   </div>
 </template>
 <script>
-import { goodsQuery } from '../../api/dataQueryApi';
+import { getGoodsList } from '../../api/dataQueryApi';
   export default {
     name:"goodsControl",
     data() {
@@ -194,7 +194,7 @@ import { goodsQuery } from '../../api/dataQueryApi';
     },
     methods:{
       mountedMet:function(params) {
-        goodsQuery()
+        getGoodsList()
         .then((response)=>{
           this.goodsList = response.data.data;
         })

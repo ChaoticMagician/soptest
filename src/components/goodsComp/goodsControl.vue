@@ -145,19 +145,23 @@
               v-model="thisGoodsInfo.name"
             ></el-input><br/>
             进价：
-            <el-input
-              class="goodsFormInput"
+            <el-input-number
               :disabled="ChangeGoodsType==4"
-              placeholder="请输入"
+              class="goodsFormInput"
+              :precision="2"
+              :step="0.1"
               v-model="thisGoodsInfo.price_In"
-            ></el-input>
+              :min="1"
+            ></el-input-number>
             售价：
-            <el-input
-              class="goodsFormInput"
+            <el-input-number
               :disabled="ChangeGoodsType==4"
-              placeholder="请输入"
+              class="goodsFormInput"
+              :precision="2"
+              :step="0.1"
               v-model="thisGoodsInfo.price_Out"
-            ></el-input><br/>
+              :min="1"
+            ></el-input-number><br/>
             类别：
             <el-select
               :disabled="ChangeGoodsType==4"
@@ -197,7 +201,7 @@
   </div>
 </template>
 <script>
-import { goodsQuery,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQueryApi';
+import { getGoodsList,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQueryApi';
   export default {
     name:"goodsControl",
     data() {
@@ -226,7 +230,7 @@ import { goodsQuery,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQuery
     },
     methods:{
       mountedMet:function(params) {
-        goodsQuery()
+        getGoodsList()
         .then((response)=>{
           this.goodsList = response.data.data;
         })
@@ -290,7 +294,6 @@ import { goodsQuery,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQuery
       deleteGoodsMet:function(goodsrow) {
         deleteGoogs(goodsrow.goodsCode)
         .then((response)=>{
-          console.log(response);
           if ( response.data.data==true ) {
             this.$message.success({
               message:'删除成功',

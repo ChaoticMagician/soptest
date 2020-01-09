@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="registerType==1" >
+    <template v-if="ruleType==1" >
       <el-card :body-style="{ padding: '10px 20px' }" >
         <el-select
           class=""
@@ -13,36 +13,14 @@
             :value="item.goodsCode">
           </el-option> 
         </el-select>
-        <el-select
-          class="queryOption"
-          v-model="category"
-          placeholder="状态">
-          <el-option
-            v-for="item in this.$store.state.dictionaryData.registerStatus"
-            :key="item.keyid"
-            :label="item.value"
-            :value="item.keyid">
-          </el-option> 
-        </el-select>
-        <el-select
-          class="queryOption1"
-          v-model="userId"
-          placeholder="用户">
-          <el-option
-            v-for="item in this.$store.state.dictionaryData.userList"
-            :key="item.userId"
-            :label="item.realName"
-            :value="item.userId">
-          </el-option> 
-        </el-select>
         <el-button class="queryButton" type="primary" icon="el-icon-search" ></el-button>
         <div class="rightButton" >
-          <el-button type="primary" @click="gotoAddRegister" icon="el-icon-plus" >添加</el-button>
+          <el-button type="primary" @click="gotoAddRule" icon="el-icon-plus" >添加</el-button>
         </div>
       </el-card>
       <el-card :body-style="{ padding: '0px' }"  class="dataList">
         <el-table
-          :data="this.$store.state.registerData.registerList"
+          :data="this.$store.state.ruleData.ruleList"
           height="835"
           border
           style="width: 100%;">
@@ -56,7 +34,7 @@
           <el-table-column
             align='center'
             fixed
-            prop="formCode"
+            prop="goodsCode"
             label="单号"
             width="180">
           </el-table-column>
@@ -64,7 +42,13 @@
             align='center'
             prop="goodsName"
             label="商品名称"
-            width="180">
+            width="200">
+          </el-table-column>
+          <el-table-column
+            align='center'
+            prop="category"
+            label="商品类型"
+            width="200">
           </el-table-column>
           <el-table-column
             align='center'
@@ -74,37 +58,9 @@
           </el-table-column>
           <el-table-column
             align='center'
-            prop="stamp"
-            label="最后修改时间"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            align='center'
-            prop="realName"
-            label="修改人"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            align='center'
-            label="状态"
-            width="150">
-            <template slot-scope="scope">
-              <el-tag v-if="scope.row.status==0" type="success">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
-              <el-tag v-if="scope.row.status==1" type="info">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
-              <el-tag v-if="scope.row.status==2" type="warning">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column
-            align='center'
-            prop="total"
-            label="总价"
-            width="150">
-          </el-table-column>
-          <el-table-column
-            align='center'
             prop="other"
             label="其他"
-            width="200">
+            width="400">
           </el-table-column>
           <el-table-column
             align='center'
@@ -114,19 +70,18 @@
             <template slot-scope="scope" >
               <el-button
                 type="success"
-                @click="gotoWatchRegister(scope.row)"
+                @click="gotoWatchRule(scope.row)"
                 size="small"
               >查看</el-button>
               <el-button
                 type="warning"
-                v-if="scope.row.status!=1"
-                @click="gotoChangeRegister(scope.row)"
+                @click="gotoChangeRule(scope.row)"
                 size="small"
               >编辑</el-button>
               <el-button
                 type="danger"
                 v-if="scope.row.status!=1"
-                @click="deleteRegisterMet(scope.row)"
+                @click="deleteRuleMet(scope.row)"
                 size="small"
               >删除</el-button>
             </template>
@@ -138,68 +93,52 @@
       <el-card :body-style="{ padding: '10px 20px' }" >
         <div class="rightButton" >
           <el-button
-            v-if="registerType==2"
+            v-if="ruleType==2"
             type="success"
-            @click="addRegisterMet"
+            @click="addRuleMet"
             icon="el-icon-folder-checked"
           >保存</el-button>
           <el-button
-            v-if="registerType==3"
+            v-if="ruleType==3"
             type="warning"
-            @click="changeRegisterMet"
+            @click="changeRuleMet"
             icon="el-icon-folder-checked"
           >更改</el-button>
           <el-button
             type="info"
             icon="el-icon-folder-delete"
-            @click="gobackRegisterList" 
+            @click="gobackRuleList" 
           >返回</el-button>
         </div>
       </el-card>
       <el-card :body-style="{ padding: '0px' }">
         <form class="registerForm" >
-          <h3>入库登记单</h3>
-          种类：{{goodsobj.name}}
-            <!-- @click="changeGoodsInfo(item)" -->
+          <h3>预警规则单</h3>
+          种类：
           <el-select
-            class="goodsSelect"
-            v-model="goodsobj"
-            :disabled="registerType==4"
+            v-model="thisRuleInfo.goodsCode"
+            :disabled="ruleType==4||ruleType==3"
             placeholder="种类">
             <el-option
               v-for="item in this.$store.state.goodsData.goodsList"
               :key="item.goodsCode"
               :label="item.name"
-              :value="item">
+              :value="item.goodsCode">
             </el-option> 
           </el-select><br/>
           数量：
           <el-input-number
-            :disabled="registerType==4"
+            :disabled="ruleType==4"
             class="registerFormInput"
-            v-model="thisRegisterInfo.count"
-            :min="1"
+            v-model="thisRuleInfo.count"
+            :min="0"
           ></el-input-number><br/>
-          单价：<div class="priceSpen" >{{goodsobj.price_In}}元</div><br/>
-          总价：<div class="priceSpen" >{{goodsobj.price_In*thisRegisterInfo.count}}元</div><br/>
-          修改人：
-          <el-select
-            :disabled="true"
-            v-model="thisRegisterInfo.userId"
-            placeholder="用户">
-            <el-option
-              v-for="item in this.$store.state.dictionaryData.userList"
-              :key="item.userId"
-              :label="item.realName"
-              :value="item.userId">
-            </el-option>
-          </el-select><br/>
           其他：
           <el-input
             class="registerFormInput"
-            :disabled="registerType==4"
+            :disabled="ruleType==4"
             placeholder="请输入"
-            v-model="thisRegisterInfo.other"
+            v-model="thisRuleInfo.other"
           ></el-input><br/>
         </form>
       </el-card>
@@ -208,108 +147,78 @@
 </template>
 
 <script>
-import { addRegister,deleteRegister,changeRegister,getGoogs } from '../../api/dataQueryApi';
+import { addRule,deleteRule,changeRule,getGoogs } from '../../api/dataQueryApi';
 export default {
-    name:"registerInput",
+    name:"warnrule",
     data() {
       return {
-        registerType: 1,
+        ruleType: 1,
         category:'',
         goodsCode:'',
         userId:'',
-        goodsobj:{price_In:0},
-        thisRegisterInfo:{
-          id: 2,
-          formCode: "9f963ddb954747dc9776b4873bdb08f0",
-          goodsCode: "",
-          goodsName: "",
-          count: 20,
-          stamp: "20200108031647",
-          userId: "8",
-          realName: "c4e799fad53c0dec94d4f201a4dd5e78",
-          status: 0,
-          type: 0,
-          total: 200,
-          other: "string",
-        },
+        thisRuleInfo:{},
       }
     },
     mounted() {
-
+      //异步预警规则列表
+      this.$store.dispatch("ActRuL");
     },
     methods:{
-      gotoAddRegister:function() {
-        this.goodsobj={price_In:0};
+      gotoAddRule:function() {
         let thisUserID = this.$store.state.dictionaryData.thisUser.userId;
-        this.thisRegisterInfo = {
+        this.thisRuleInfo = {
           id: 0,
-          formCode: "",
           goodsCode: "",
-          goodsName: "",
-          count: 1,
-          stamp: "",
-          userId: thisUserID,
-          realName: "",
-          status: 0,
-          type: 0,
-          total: 0,
+          count: 0,
           other: "",
         }
-        this.registerType = 2;
+        this.ruleType = 2;
       },
-      gobackRegisterList:function() {
-        this.registerType = 1;
+      gobackRuleList:function() {
+        this.ruleType = 1;
       },
-      gotoChangeRegister:function(registerrow) {
-        getGoogs(registerrow.goodsCode)
+      gotoChangeRule:function(rulerow) {
+        getGoogs(rulerow.goodsCode)
         .then((response)=>{
-          this.goodsobj=response.data.data;
         })
         .catch((err)=>{
           this.$message.error({
             message:'错误'+err,
           })
         })
-        this.thisRegisterInfo =  registerrow;
-        this.registerType = 3;
+        this.thisRuleInfo = rulerow;
+        this.ruleType = 3;
       },
-      gotoWatchRegister:function(registerrow) {
-        getGoogs(registerrow.goodsCode)
+      gotoWatchRule:function(rulerow) {
+        console.log(rulerow);
+        
+        getGoogs(rulerow.goodsCode)
         .then((response)=>{
-          this.goodsobj=response.data.data;
         })
         .catch((err)=>{
           this.$message.error({
             message:'错误'+err,
           })
         })
-        this.thisRegisterInfo =  registerrow;
-        this.thisRegisterInfo.userId= this.$store.state.dictionaryData.thisUser.userId;
-        this.registerType = 4;
+        this.thisRuleInfo = rulerow;
+        this.ruleType = 4;
       },
-      changeGoodsInfo:function(params,params12) {
-        console.log(params,params12);
-      },
-      addRegisterMet:function() {
-        if (this.goodsobj.goodsCode==undefined) {
+      addRuleMet:function() {
+        if (this.thisRuleInfo.goodsCode=='') {
           //产品类型不能为空
           this.$message.error({
             message:'请选择产品类型',
           })
           return
         }
-        this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
-        this.thisRegisterInfo.status = 0;
-        this.thisRegisterInfo.type = 0;
-        this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
-        addRegister( this.thisRegisterInfo)
+        addRule( this.thisRuleInfo)
         .then((response)=>{
           if ( response.data.data==true ) {
             this.$message.success({
               message:'添加成功',
             })
-            this.$store.dispatch("ActRL");
-            this.gobackRegisterList();
+            this.$store.dispatch("ActRuL");
+            this.gobackRuleList();
           } else {
             this.$message.error({
               message:'添加失败：'+response.data.message,
@@ -317,14 +226,14 @@ export default {
           }
         })
       },
-      deleteRegisterMet:function(registerrow) {
-        deleteRegister(registerrow.formCode)
+      deleteRuleMet:function(rulerow) {
+        deleteRule(rulerow.id)
         .then((response)=>{
           if ( response.data.data==true ) {
             this.$message.success({
               message:'删除成功',
             })
-            this.$store.dispatch("ActRL");
+            this.$store.dispatch("ActRuL");
           } else {
             this.$message.error({
               message:'删除失败：'+response.data.message,
@@ -337,19 +246,15 @@ export default {
           })
         })
       },
-      changeRegisterMet:function() {
-        this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
-        // this.thisRegisterInfo.status = 0;
-        // this.thisRegisterInfo.type = 0;
-        this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
-        changeRegister( this.thisRegisterInfo)
+      changeRuleMet:function() {
+        changeRule( this.thisRuleInfo)
         .then((response)=>{
           if ( response.data.data==true ) {
             this.$message.success({
               message:'修改成功',
             })
             this.$store.dispatch("ActRL");
-            this.gobackRegisterList();
+            this.gobackRuleList();
           } else {
             this.$message.error({
               message:'修改失败：'+response.data.message,
@@ -382,7 +287,7 @@ export default {
     left: 20px;
   }
   .queryButton{
-    margin-left: 40px;
+    margin-left: 10px;
   }
   .registerForm{
     max-height: 835px;

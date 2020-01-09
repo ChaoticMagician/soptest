@@ -24,9 +24,16 @@ const routes = [
       },
       {
         path: "/register/input",
-        name: "test2",
+        name: "registerInput",
         components:{
           default: () => import("../components/registerComp/registerInput.vue"),
+        },
+      },
+      {
+        path: "/register/check",
+        name: "registerCheck",
+        components:{
+          default: () => import("../components/registerComp/registerCheck.vue"),
         },
       },
       {
@@ -43,12 +50,25 @@ const routes = [
           default: () => import("../components/goodsComp/goodsQuery.vue"),
         },
       },
+      {
+        path: "/warn/rule",
+        name: "warnrule",
+        components:{
+          default: () => import("../components/warnRuleComp/warnRule.vue"),
+        },
+      },
+      {
+        path: "/warn/record",
+        name: "warnRecord",
+        components:{
+          default: () => import("../components/warnRuleComp/warnRecord.vue"),
+        },
+      },
     ],
   }
 ];
 
 const router = new VueRouter({
-  // mode: "history",
   base: process.env.BASE_URL,
   routes
 });

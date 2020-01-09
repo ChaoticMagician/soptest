@@ -1,4 +1,4 @@
-import { goodsQuery } from '../api/dataQueryApi.js';
+import { getGoodsList } from '../api/dataQueryApi.js';
 const state = {
   goodsList:[]
 }
@@ -15,7 +15,7 @@ const getters = {
 const actions = {
   //获取商品列表数据数据
   ActGL({state,commit}){
-    goodsQuery()
+    getGoodsList()
     .then(function (response) {
       commit('changeGL',response.data.data);
     })

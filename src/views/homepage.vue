@@ -4,7 +4,7 @@
     <el-header>
       <span class="sys-icon iconfont LPiconyunduan"></span>
       <div class="sys-title" @click="goBackFirst" >
-        供销存管理系统
+        进销存管理系统
       </div>
       <div class="sys-center" >
         <span>个人信息</span>
@@ -80,7 +80,7 @@ export default {
             {num:101,name:'入库登记',url:'/register/input'},
             {num:102,name:'出库登记',url:'/register/input'},
             {num:103,name:'货损登记',url:'/register/input'},
-            {num:104,name:'登记状态',url:'/register/input'},
+            {num:104,name:'登记状态',url:'/register/check'},
           ]
         },
         {
@@ -103,8 +103,8 @@ export default {
           icon:'LPiconhuiyuanribao',
           name:'库存预警',
           children:[
-            {num:401,name:'预警信息',url:'/home/test2'},
-            {num:402,name:'预警规则',url:'/home/test2'},
+            {num:401,name:'预警信息',url:'/warn/record'},
+            {num:402,name:'预警规则',url:'/warn/rule'},
           ]
         },
       ],

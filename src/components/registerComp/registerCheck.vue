@@ -14,17 +14,6 @@
           </el-option> 
         </el-select>
         <el-select
-          class="queryOption"
-          v-model="category"
-          placeholder="状态">
-          <el-option
-            v-for="item in this.$store.state.dictionaryData.registerStatus"
-            :key="item.keyid"
-            :label="item.value"
-            :value="item.keyid">
-          </el-option> 
-        </el-select>
-        <el-select
           class="queryOption1"
           v-model="userId"
           placeholder="用户">
@@ -37,12 +26,11 @@
         </el-select>
         <el-button class="queryButton" type="primary" icon="el-icon-search" ></el-button>
         <div class="rightButton" >
-          <el-button type="primary" @click="gotoAddRegister" icon="el-icon-plus" >添加</el-button>
         </div>
       </el-card>
       <el-card :body-style="{ padding: '0px' }"  class="dataList">
         <el-table
-          :data="this.$store.state.registerData.registerList"
+          :data="this.$store.state.registerData.checkRegisterList"
           height="835"
           border
           style="width: 100%;">
@@ -89,9 +77,7 @@
             label="状态"
             width="150">
             <template slot-scope="scope">
-              <el-tag v-if="scope.row.status==0" type="success">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
-              <el-tag v-if="scope.row.status==1" type="info">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
-              <el-tag v-if="scope.row.status==2" type="warning">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
+              <el-tag type="success">{{$store.state.dictionaryData.registerStatus[scope.row.status].value}}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -117,18 +103,6 @@
                 @click="gotoWatchRegister(scope.row)"
                 size="small"
               >查看</el-button>
-              <el-button
-                type="warning"
-                v-if="scope.row.status!=1"
-                @click="gotoChangeRegister(scope.row)"
-                size="small"
-              >编辑</el-button>
-              <el-button
-                type="danger"
-                v-if="scope.row.status!=1"
-                @click="deleteRegisterMet(scope.row)"
-                size="small"
-              >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -138,17 +112,15 @@
       <el-card :body-style="{ padding: '10px 20px' }" >
         <div class="rightButton" >
           <el-button
-            v-if="registerType==2"
             type="success"
-            @click="addRegisterMet"
+            @click="changeRegisterMet(1)"
             icon="el-icon-folder-checked"
-          >保存</el-button>
+          >同意</el-button>
           <el-button
-            v-if="registerType==3"
             type="warning"
-            @click="changeRegisterMet"
+            @click="changeRegisterMet(2)"
             icon="el-icon-folder-checked"
-          >更改</el-button>
+          >驳回</el-button>
           <el-button
             type="info"
             icon="el-icon-folder-delete"
@@ -234,45 +206,42 @@ export default {
         },
       }
     },
-    mounted() {
-
-    },
     methods:{
-      gotoAddRegister:function() {
-        this.goodsobj={price_In:0};
-        let thisUserID = this.$store.state.dictionaryData.thisUser.userId;
-        this.thisRegisterInfo = {
-          id: 0,
-          formCode: "",
-          goodsCode: "",
-          goodsName: "",
-          count: 1,
-          stamp: "",
-          userId: thisUserID,
-          realName: "",
-          status: 0,
-          type: 0,
-          total: 0,
-          other: "",
-        }
-        this.registerType = 2;
-      },
+      // gotoAddRegister:function() {
+      //   this.goodsobj={price_In:0};
+      //   let thisUserID = this.$store.state.dictionaryData.thisUser.userId;
+      //   this.thisRegisterInfo = {
+      //     id: 0,
+      //     formCode: "",
+      //     goodsCode: "",
+      //     goodsName: "",
+      //     count: 1,
+      //     stamp: "",
+      //     userId: thisUserID,
+      //     realName: "",
+      //     status: 0,
+      //     type: 0,
+      //     total: 0,
+      //     other: "",
+      //   }
+      //   this.registerType = 2;
+      // },
       gobackRegisterList:function() {
         this.registerType = 1;
       },
-      gotoChangeRegister:function(registerrow) {
-        getGoogs(registerrow.goodsCode)
-        .then((response)=>{
-          this.goodsobj=response.data.data;
-        })
-        .catch((err)=>{
-          this.$message.error({
-            message:'错误'+err,
-          })
-        })
-        this.thisRegisterInfo =  registerrow;
-        this.registerType = 3;
-      },
+      // gotoChangeRegister:function(registerrow) {
+      //   getGoogs(registerrow.goodsCode)
+      //   .then((response)=>{
+      //     this.goodsobj=response.data.data;
+      //   })
+      //   .catch((err)=>{
+      //     this.$message.error({
+      //       message:'错误'+err,
+      //     })
+      //   })
+      //   this.thisRegisterInfo =  registerrow;
+      //   this.registerType = 3;
+      // },
       gotoWatchRegister:function(registerrow) {
         getGoogs(registerrow.goodsCode)
         .then((response)=>{
@@ -287,36 +256,33 @@ export default {
         this.thisRegisterInfo.userId= this.$store.state.dictionaryData.thisUser.userId;
         this.registerType = 4;
       },
-      changeGoodsInfo:function(params,params12) {
-        console.log(params,params12);
-      },
-      addRegisterMet:function() {
-        if (this.goodsobj.goodsCode==undefined) {
-          //产品类型不能为空
-          this.$message.error({
-            message:'请选择产品类型',
-          })
-          return
-        }
-        this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
-        this.thisRegisterInfo.status = 0;
-        this.thisRegisterInfo.type = 0;
-        this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
-        addRegister( this.thisRegisterInfo)
-        .then((response)=>{
-          if ( response.data.data==true ) {
-            this.$message.success({
-              message:'添加成功',
-            })
-            this.$store.dispatch("ActRL");
-            this.gobackRegisterList();
-          } else {
-            this.$message.error({
-              message:'添加失败：'+response.data.message,
-            })
-          }
-        })
-      },
+      // addRegisterMet:function() {
+      //   if (this.goodsobj.goodsCode==undefined) {
+      //     //产品类型不能为空
+      //     this.$message.error({
+      //       message:'请选择产品类型',
+      //     })
+      //     return
+      //   }
+      //   this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
+      //   this.thisRegisterInfo.status = 0;
+      //   this.thisRegisterInfo.type = 0;
+      //   this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
+      //   addRegister( this.thisRegisterInfo)
+      //   .then((response)=>{
+      //     if ( response.data.data==true ) {
+      //       this.$message.success({
+      //         message:'添加成功',
+      //       })
+      //       this.$store.dispatch("ActRL");
+      //       this.gobackRegisterList();
+      //     } else {
+      //       this.$message.error({
+      //         message:'添加失败：'+response.data.message,
+      //       })
+      //     }
+      //   })
+      // },
       deleteRegisterMet:function(registerrow) {
         deleteRegister(registerrow.formCode)
         .then((response)=>{
@@ -337,9 +303,9 @@ export default {
           })
         })
       },
-      changeRegisterMet:function() {
+      changeRegisterMet:function(status) {
         this.thisRegisterInfo.goodsCode = this.goodsobj.goodsCode;
-        // this.thisRegisterInfo.status = 0;
+        this.thisRegisterInfo.status = status;
         // this.thisRegisterInfo.type = 0;
         this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
         changeRegister( this.thisRegisterInfo)

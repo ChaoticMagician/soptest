@@ -3,12 +3,13 @@ import Vuex from "vuex";
 
 import goodsData from './goodsData.js';
 import registerData from './registerData.js';
+import ruleData from './ruleData.js';
 import dictionaryData from './dictionaryData.js';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   modules: {
-    goodsData,registerData,dictionaryData
+    goodsData,registerData,ruleData,dictionaryData
   }
 });
