@@ -7,6 +7,12 @@ const state = {
     {value: 4,label: '居家用具'},
     {value: 5,label: '家具摆设'}
   ],
+  seasonType: [
+    {value:['202001','202003'],label: '第一季度'},
+    {value:['202004','202006'],label: '第二季度'}, 
+    {value:['202007','202009'],label: '第三季度'},
+    {value:['2020010','2020012'],label: '第四季度'},
+  ],
   registerStatus:[
     {value:'待审核',keyid:0},
     {value:'已确认',keyid:1},

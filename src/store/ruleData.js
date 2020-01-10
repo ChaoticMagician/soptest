@@ -34,7 +34,6 @@ const actions = {
   ActWL({state,commit}){
     getRecordList()
     .then(function (response) {
-      console.log(response);
       commit('changeWL',response.data.data);
     })
     .catch(function (error) {

@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import { addRegister,deleteRegister,changeRegister,getGoogs } from '../../api/dataQueryApi';
+import { addRegister,deleteRegister,changeRegister,getGoogs,Audit } from '../../api/dataQueryApi';
 export default {
     name:"registerInput",
     data() {
@@ -256,7 +256,7 @@ export default {
         this.thisRegisterInfo.status = status;
         // this.thisRegisterInfo.type = 0;
         this.thisRegisterInfo.total =this.goodsobj.price_In*this.thisRegisterInfo.count;
-        changeRegister( this.thisRegisterInfo)
+        Audit( this.thisRegisterInfo)
         .then((response)=>{
           if ( response.data.data==true ) {
             this.$message.success({

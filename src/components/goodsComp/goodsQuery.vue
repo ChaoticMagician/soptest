@@ -106,8 +106,9 @@
         <el-card :body-style="{ padding: '0px' }">
           <form class="goodsForm" >
             商品图片：
-            <!-- <el-upload
+            <el-upload
               class="avatar-uploader"
+              :disabled="ChangeGoodsType==4"
               action="https://jsonplaceholder.typicode.com/posts/"
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
@@ -115,7 +116,7 @@
               >
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload> -->
+            </el-upload>
             种类名：
             <el-input
               class="goodsFormInput"

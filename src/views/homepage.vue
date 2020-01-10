@@ -96,7 +96,7 @@ export default {
           num:3,
           icon:'LPicongongnengliebiao',
           name:'货物盘点',
-          url:'/home/test2'
+          url:'/statistics/index'
         },
         {
           num:4,
@@ -115,7 +115,12 @@ export default {
 
   },
   mounted(){
-
+    //异步获取商品列表
+    this.$store.dispatch("ActGL");
+    //异步获取记录列表
+    this.$store.dispatch("ActRL");
+    //异步获取用户列表
+    this.$store.dispatch("ActUL");
   },
   methods:{
     goBackFirst () {

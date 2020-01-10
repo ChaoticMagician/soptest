@@ -1,6 +1,6 @@
 <template>
   <div>
-    asdfasdf
+    <h1>这是欢迎页，欢迎~欢迎~</h1>
   </div>
 </template>
 <script>

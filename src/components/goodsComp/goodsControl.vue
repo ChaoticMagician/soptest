@@ -128,6 +128,7 @@
           <form class="goodsForm" >
             商品图片：
             <!-- <el-upload
+              :disabled="ChangeGoodsType==4"
               class="avatar-uploader"
               action="https://jsonplaceholder.typicode.com/posts/"
               :show-file-list="false"
@@ -137,6 +138,14 @@
               <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon"></i>
             </el-upload> -->
+            <div class="demo">
+              <p>
+                <input ref="fileInput" type="file"/>
+              </p>
+              <div ref="result"> 
+                <!-- 这里用来显示读取结果 --> 
+              </div>
+            </div>
             种类名：
             <el-input
               class="goodsFormInput"

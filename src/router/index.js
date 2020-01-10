@@ -65,6 +65,13 @@ const routes = [
         },
       },
       {
+        path: "/statistics/index",
+        name: "statistics",
+        components:{
+          default: () => import("../components/statisticsComp/statistics.vue"),
+        },
+      },
+      {
         path: "/warn/rule",
         name: "warnrule",
         components:{

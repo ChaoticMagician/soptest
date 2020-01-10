@@ -56,13 +56,14 @@ const actions = {
   },
   //获取筛查入库记录列表数据
   ActQueryIRL({state,commit},Queryinfo){
+    console.log(Queryinfo);
     let inputRegisterList = state.inputRegisterList;
     if (Queryinfo.goodsCode !='') {
       inputRegisterList = inputRegisterList.filter( 
         (value, index) => value.goodsCode==Queryinfo.goodsCode
       );
     }
-    if (Queryinfo.category !='') {
+    if (Queryinfo.category !=='') {
       inputRegisterList = inputRegisterList.filter( 
         (value, index) => value.status==Queryinfo.category
       );
@@ -82,7 +83,7 @@ const actions = {
         (value, index) => value.goodsCode==Queryinfo.goodsCode
       );
     }
-    if (Queryinfo.category !='') {
+    if (Queryinfo.category!=='') {
       outRegisterList = outRegisterList.filter( 
         (value, index) => value.status==Queryinfo.category
       );
@@ -102,7 +103,7 @@ const actions = {
         (value, index) => value.goodsCode==Queryinfo.goodsCode
       );
     }
-    if (Queryinfo.category !='') {
+    if (Queryinfo.category!=='') {
       damageRegisterList = damageRegisterList.filter( 
         (value, index) => value.status==Queryinfo.category
       );
