@@ -137,7 +137,7 @@ export default {
   background: #c20e0e;
 }
 #mainwin{
-  height: 99.5%;
+  height: 97%;
 }
 .el-header{
   height: 50px;

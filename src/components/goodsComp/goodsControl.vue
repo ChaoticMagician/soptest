@@ -127,25 +127,8 @@
         <el-card :body-style="{ padding: '0px' }">
           <form class="goodsForm" >
             商品图片：
-            <!-- <el-upload
-              :disabled="ChangeGoodsType==4"
-              class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload> -->
-            <div class="demo">
-              <p>
-                <input ref="fileInput" type="file"/>
-              </p>
-              <div ref="result"> 
-                <!-- 这里用来显示读取结果 --> 
-              </div>
-            </div>
+            <img-input :ChangeGoodsType='ChangeGoodsType' :imgDadaObj='thisGoodsInfo'  >
+            </img-input>
             种类名：
             <el-input
               class="goodsFormInput"
@@ -211,6 +194,7 @@
 </template>
 <script>
 import { getGoodsList,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQueryApi';
+import imgInput from './imgInput/imgInput'
   export default {
     name:"goodsControl",
     data() {
@@ -229,10 +213,13 @@ import { getGoodsList,addGoogs,deleteGoogs,changeGoogs } from '../../api/dataQue
           category: '生活日化',
           label: 'asd',
           machine: '16546416fdhgdf',
-          img: 'ghjgf455464',
+          img: '',
           other: 'fdkhjgaoifiwejrgf',
         }
       }
+    },
+    components:{
+      imgInput
     },
     mounted() {
       this.mountedMet();

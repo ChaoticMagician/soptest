@@ -34,7 +34,7 @@
             <el-table-column
               align='center'
               fixed
-              prop="name"
+              prop="goodsName"
               label="种类名"
               width="180">
             </el-table-column>
@@ -76,8 +76,8 @@
             </el-table-column>
             <el-table-column
               align='center'
-              prop="other"
-              label="其他"
+              prop="count"
+              label="库存量"
               width="200">
             </el-table-column>
             <el-table-column
@@ -106,23 +106,14 @@
         <el-card :body-style="{ padding: '0px' }">
           <form class="goodsForm" >
             商品图片：
-            <el-upload
-              class="avatar-uploader"
-              :disabled="ChangeGoodsType==4"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              >
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+            <img-input :ChangeGoodsType='ChangeGoodsType' :imgDadaObj='thisGoodsInfo'  >
+            </img-input>
             种类名：
             <el-input
               class="goodsFormInput"
               :disabled="ChangeGoodsType==4"
               placeholder="请输入"
-              v-model="thisGoodsInfo.name"
+              v-model="thisGoodsInfo.goodsName"
             ></el-input><br/>
             进价：
             <el-input
@@ -164,12 +155,12 @@
               placeholder="请输入"
               v-model="thisGoodsInfo.machine"
             ></el-input>
-            其他：
+            库存量：
             <el-input
               class="goodsFormInput"
               :disabled="ChangeGoodsType==4"
               placeholder="请输入"
-              v-model="thisGoodsInfo.other"
+              v-model="thisGoodsInfo.count"
             ></el-input><br/>
           </form>
         </el-card>
@@ -177,7 +168,8 @@
   </div>
 </template>
 <script>
-import { getGoodsList } from '../../api/dataQueryApi';
+import { getGoodsList,getInventoryList } from '../../api/dataQueryApi';
+import imgInput from './imgInput/imgInput'
   export default {
     name:"goodsControl",
     data() {
@@ -190,12 +182,15 @@ import { getGoodsList } from '../../api/dataQueryApi';
         thisGoodsInfo:{}
       }
     },
+    components:{
+      imgInput
+    },
     mounted() {
       this.mountedMet();
     },
     methods:{
       mountedMet:function(params) {
-        getGoodsList()
+        getInventoryList()
         .then((response)=>{
           this.goodsList = response.data.data;
         })

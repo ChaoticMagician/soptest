@@ -160,3 +160,11 @@ export function getStatisticsDate(date) {//按时段查询
   });
   return requestdata;
 };
+//库存查询
+export function getInventoryList() {
+  let requestdata =  service({
+    url: '/api/Inventory',
+    method: 'get',
+  });
+  return requestdata;
+};

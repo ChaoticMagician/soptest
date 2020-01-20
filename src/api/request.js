@@ -3,7 +3,7 @@ import { Message } from 'element-ui'
 import {getCookie,setCookie} from './cookie'
 import router from "../router";
 // 创建axios实例
-var baseURL = 'http://192.168.0.101:8199';
+var baseURL = 'http://127.0.0.1:8199';
 
 const service = axios.create({
     baseURL, // api的base_url
