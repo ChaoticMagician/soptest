@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 
 import goodsData from './goodsData.js';
-import registerData from './registerData.js';
+import registerData from './registerdata.js';
 import ruleData from './ruleData.js';
 import dictionaryData from './dictionaryData.js';
 import statisticsData from './statisticsData.js';
